@@ -6,7 +6,7 @@ class NewsController < ApplicationController
   # GET /news
   def index
     if @is_authenticated
-      @news = New.where("created_at >= ?", 30.days.ago)
+      @news = New.where("created_at >= ?", 60.days.ago).order(created_at: :desc)
 
       render json: @news
     else
