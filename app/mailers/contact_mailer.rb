@@ -3,7 +3,8 @@ class ContactMailer < ApplicationMailer
 
   def contact_email
     @contact = params[:values]
-    @url  = 'http://example.com/login'
+    console.log(22)
     mail(to:'lfbesa@uc.cl', subject: @contact.subject)
+    console.log(33)
   end
 end
