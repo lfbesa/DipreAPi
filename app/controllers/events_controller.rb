@@ -8,7 +8,7 @@ class EventsController < ApplicationController
     if @is_authenticated
       render json: @events
     else
-      render status: 400, json: {
+      render status: 403, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -19,7 +19,7 @@ class EventsController < ApplicationController
     if @is_authenticated
       render json: @event
     else
-      render status: 400, json: {
+      render status: 403, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -37,7 +37,7 @@ class EventsController < ApplicationController
         render json: @event.errors, status: :unprocessable_entity
       end
     else
-      render status: 400, json: {
+      render status: 403, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -52,7 +52,7 @@ class EventsController < ApplicationController
         render json: @event.errors, status: :unprocessable_entity
       end
     else
-      render status: 400, json: {
+      render status: 403, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -63,7 +63,7 @@ class EventsController < ApplicationController
     if @is_authenticated
       @event.destroy
     else
-      render status: 400, json: {
+      render status: 403, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -86,6 +86,6 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :description, :epigraph, :date)
+      params.require(:event).permit(:title, :description, :epigraph, :date, :to_date, :hour, :url)
     end
 end
