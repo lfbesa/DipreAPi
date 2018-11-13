@@ -8,8 +8,7 @@ class EventsController < ApplicationController
     if @is_authenticated
       render json: @events
     else
-      render json: {
-        status: 400,
+      render status: 400, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -20,8 +19,7 @@ class EventsController < ApplicationController
     if @is_authenticated
       render json: @event
     else
-      render json: {
-        status: 400,
+      render status: 400, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -39,8 +37,7 @@ class EventsController < ApplicationController
         render json: @event.errors, status: :unprocessable_entity
       end
     else
-      render json: {
-        status: 400,
+      render status: 400, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -55,8 +52,7 @@ class EventsController < ApplicationController
         render json: @event.errors, status: :unprocessable_entity
       end
     else
-      render json: {
-        status: 400,
+      render status: 400, json: {
         message: "No TOKEN auth."
       }.to_json
     end
@@ -66,6 +62,10 @@ class EventsController < ApplicationController
   def destroy
     if @is_authenticated
       @event.destroy
+    else
+      render status: 400, json: {
+        message: "No TOKEN auth."
+      }.to_json
     end
   end
 
