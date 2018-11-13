@@ -4,7 +4,7 @@ class ContactMailer < ApplicationMailer
   def contact_email
     @contact = params[:values]
     puts 1
-    mail(to:'lfbesa@uc.cl', subject: @contact.subject)
+    mail(to:'lfbesa@uc.cl', subject: @contact.subject, from: "lfbesa@uc.cl")
     puts 2
   end
 end
