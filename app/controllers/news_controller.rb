@@ -6,7 +6,7 @@ class NewsController < ApplicationController
   # GET /news
   def index
     if @is_authenticated
-      @news = New.all
+      @news = New.where("created_at >= ?", 30.days.ago)
 
       render json: @news
     else
