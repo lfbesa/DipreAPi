@@ -5,15 +5,27 @@ class EventsController < ApplicationController
   # GET /events
   def index
     @events = Event.all
-
-    render json: @events
+    if @is_authenticated
+      render json: @events
+    else
+      render json: {
+        status: 400,
+        message: "No TOKEN auth."
+      }.to_json
+    end
   end
 
   # GET /events/1
   def show
     if @is_authenticated
       render json: @event
+    else
+      render json: {
+        status: 400,
+        message: "No TOKEN auth."
+      }.to_json
     end
+
   end
 
   # POST /events
@@ -26,6 +38,11 @@ class EventsController < ApplicationController
       else
         render json: @event.errors, status: :unprocessable_entity
       end
+    else
+      render json: {
+        status: 400,
+        message: "No TOKEN auth."
+      }.to_json
     end
   end
 
@@ -37,6 +54,11 @@ class EventsController < ApplicationController
       else
         render json: @event.errors, status: :unprocessable_entity
       end
+    else
+      render json: {
+        status: 400,
+        message: "No TOKEN auth."
+      }.to_json
     end
   end
 
