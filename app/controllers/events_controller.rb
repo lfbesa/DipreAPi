@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   # GET /events
   def index
     if @is_authenticated
-      @events = Event.where("created_at >= ?", 60.days.ago).order(created_at: :desc)
+      @events = Event.where("created_at >= ?", 60.days.ago).order(date: :desc)
       render json: @events
     else
       render status: 403, json: {
