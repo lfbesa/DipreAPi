@@ -1,16 +1,14 @@
 module Api
-      module V1
-    class NewsController < ApplicationController
-      before_action :set_news, only: [:show, :update, :destroy]
+  module V1
+    class EventsController < ApplicationController
+      before_action :set_event, only: [:show, :update, :destroy]
       before_action :authenticate_token
 
-
-      # GET /news
+      # GET /events
       def index
         if @is_authenticated
-          @news = New.where("created_at >= ?", 60.days.ago).order(publishedAt: :desc)
-
-          render json: @news
+          @events = Event.where("created_at >= ?", 60.days.ago).order(date: :desc)
+          render json: @events
         else
           render status: 403, json: {
             message: "No TOKEN auth."
@@ -18,26 +16,27 @@ module Api
         end
       end
 
-      # GET /news/1
+      # GET /events/1
       def show
         if @is_authenticated
-          render json: @news
+          render json: @event
         else
           render status: 403, json: {
             message: "No TOKEN auth."
           }.to_json
         end
+
       end
 
-      # POST /news
+      # POST /events
       def create
         if @is_authenticated
-          @news = New.new(news_params)
+          @event = Event.new(event_params)
 
-          if @news.save
-            render json: @news, status: :created, location: @news
+          if @event.save
+            render json: json_response(@news, :created), status: :created
           else
-            render json: @news.errors, status: :unprocessable_entity
+            render json: @event.errors, status: :unprocessable_entity
           end
         else
           render status: 403, json: {
@@ -46,13 +45,13 @@ module Api
         end
       end
 
-      # PATCH/PUT /news/1
+      # PATCH/PUT /events/1
       def update
         if @is_authenticated
-          if @news.update(news_params)
-            render json: @news
+          if @event.update(event_params)
+            render json: @event
           else
-            render json: @news.errors, status: :unprocessable_entity
+            render json: @event.errors, status: :unprocessable_entity
           end
         else
           render status: 403, json: {
@@ -61,10 +60,10 @@ module Api
         end
       end
 
-      # DELETE /news/1
+      # DELETE /events/1
       def destroy
         if @is_authenticated
-          @news.destroy
+          @event.destroy
         else
           render status: 403, json: {
             message: "No TOKEN auth."
@@ -83,13 +82,13 @@ module Api
           end
         end
         # Use callbacks to share common setup or constraints between actions.
-        def set_news
-          @news = New.find(params[:id])
+        def set_event
+          @event = Event.find(params[:id])
         end
 
         # Only allow a trusted parameter "white list" through.
-        def news_params
-          params.require(:news).permit(:title, :description, :publishedAt, :source, :urlToImage, :url)
+        def event_params
+          params.require(:event).permit(:title, :description, :epigraph, :date, :to_date, :hour, :url)
         end
     end
   end
