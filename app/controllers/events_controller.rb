@@ -35,7 +35,7 @@ module Api
           puts 'primera'
           if @event.save
             puts 'segunda'
-            render json: json_response(@news, :created), status: :created
+            render json: @news, status: :created
             puts 'tercera'
           else
             puts 'cuarta'
