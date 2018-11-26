@@ -35,7 +35,7 @@ module Api
           @news = New.new(news_params)
 
           if @news.save
-            render json: @news, status: :created
+            render json: json_response(@news, :created), status: :created
           else
             render json: @news.errors, status: :unprocessable_entity
           end
