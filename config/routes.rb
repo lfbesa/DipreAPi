@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-
+  resources :contacts
+  resources :news
+  resources :events
   namespace :api do
     namespace :v1, defaults: { format: :json } do
       resources :contacts

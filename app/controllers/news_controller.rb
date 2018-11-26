@@ -1,96 +1,74 @@
-module Api
-      module V1
-    class NewsController < ApplicationController
-      before_action :set_news, only: [:show, :update, :destroy]
-      before_action :authenticate_token
+class NewsController < ApplicationController
+  before_action :set_news, only: [:show, :edit, :update, :destroy]
 
+  # GET /news
+  # GET /news.json
+  def index
+    @news = New.all
+  end
 
-      # GET /news
-      def index
-        if @is_authenticated
-          @news = New.where("created_at >= ?", 60.days.ago).order(publishedAt: :desc)
+  # GET /news/1
+  # GET /news/1.json
+  def show
+  end
 
-          render json: @news
-        else
-          render status: 403, json: {
-            message: "No TOKEN auth."
-          }.to_json
-        end
+  # GET /news/new
+  def new
+    @news = New.new
+  end
+
+  # GET /news/1/edit
+  def edit
+  end
+
+  # POST /news
+  # POST /news.json
+  def create
+    @news = New.new(news_params)
+
+    respond_to do |format|
+      if @news.save
+        format.html { redirect_to @news, notice: 'New was successfully created.' }
+        format.json { render :show, status: :created, location: @news }
+      else
+        format.html { render :new }
+        format.json { render json: @news.errors, status: :unprocessable_entity }
       end
-
-      # GET /news/1
-      def show
-        if @is_authenticated
-          render json: @news
-        else
-          render status: 403, json: {
-            message: "No TOKEN auth."
-          }.to_json
-        end
-      end
-
-      # POST /news
-      def create
-        if @is_authenticated
-          @news = New.new(news_params)
-
-          if @news.save
-            render json: @news, status: :created
-          else
-            render json: @news.errors, status: :unprocessable_entity
-          end
-        else
-          render status: 403, json: {
-            message: "No TOKEN auth."
-          }.to_json
-        end
-      end
-
-      # PATCH/PUT /news/1
-      def update
-        if @is_authenticated
-          if @news.update(news_params)
-            render json: @news
-          else
-            render json: @news.errors, status: :unprocessable_entity
-          end
-        else
-          render status: 403, json: {
-            message: "No TOKEN auth."
-          }.to_json
-        end
-      end
-
-      # DELETE /news/1
-      def destroy
-        if @is_authenticated
-          @news.destroy
-        else
-          render status: 403, json: {
-            message: "No TOKEN auth."
-          }.to_json
-        end
-      end
-
-      private
-        #This is to authenticate that the call is set from an account of the front-end
-        def authenticate_token
-          @is_authenticated = false
-          if request.headers["TOKEN"]
-            if request.headers["TOKEN"] == "AppDipre"
-              @is_authenticated = true
-            end
-          end
-        end
-        # Use callbacks to share common setup or constraints between actions.
-        def set_news
-          @news = New.find(params[:id])
-        end
-
-        # Only allow a trusted parameter "white list" through.
-        def news_params
-          params.require(:news).permit(:title, :description, :publishedAt, :source, :urlToImage, :url)
-        end
     end
   end
+
+  # PATCH/PUT /news/1
+  # PATCH/PUT /news/1.json
+  def update
+    respond_to do |format|
+      if @news.update(news_params)
+        format.html { redirect_to @news, notice: 'New was successfully updated.' }
+        format.json { render :show, status: :ok, location: @news }
+      else
+        format.html { render :edit }
+        format.json { render json: @news.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /news/1
+  # DELETE /news/1.json
+  def destroy
+    @news.destroy
+    respond_to do |format|
+      format.html { redirect_to news_url, notice: 'New was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_news
+      @news = New.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def news_params
+      params.require(:news).permit(:title, :description, :publishedAt, :source, :urlToImage, :url)
+    end
 end
