@@ -33,11 +33,15 @@ module Api
       def create
         if @is_authenticated
           @news = New.new(news_params)
-
+          puts 'Ahora pase la primera'
           if @news.save
+            puts 'la segunda'
             render json: json_response(@news, :created), status: :created
+            puts 'la tercera'
           else
+            puts 'cuarta'
             render json: @news.errors, status: :unprocessable_entity
+            puts 'quinta'
           end
         else
           render status: 403, json: {
