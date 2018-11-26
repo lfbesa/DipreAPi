@@ -32,11 +32,15 @@ module Api
       def create
         if @is_authenticated
           @event = Event.new(event_params)
-
+          puts 'primera'
           if @event.save
+            puts 'segunda'
             render json: json_response(@news, :created), status: :created
+            puts 'tercera'
           else
+            puts 'cuarta'
             render json: @event.errors, status: :unprocessable_entity
+            puts 'quinta'
           end
         else
           render status: 403, json: {
